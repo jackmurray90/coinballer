@@ -56,7 +56,8 @@ def round_down(amount):
 if __name__ == '__main__':
   with Session(create_engine(DB)) as session:
     while True:
-      height = session.query(Height).one().height
+      heightstore = session.query(Height).one()
+      height = heightstore.height
       while height < get_height():
         for address, amount in get_incoming_txs(height):
           try:
@@ -78,5 +79,7 @@ if __name__ == '__main__':
           for winner in winners:
             send(winner.payout_address, payout)
           game.finished = True
-          session.commit()
-      sleep(1)
+        heightstore.height += 1
+        height = heightstore.height
+        session.commit()
+        sleep(1)
