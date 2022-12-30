@@ -9,12 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   with Session(engine) as session:
-    games = session.query(Game).all()
-    empty_games = 0
-    for game in games:
-      if all([player.bet == 0 for player in game.players]):
-        empty_games += 1
-    return render_template('coinballer.html', total_games=len(games), empty_games=empty_games)
+    return render_template('coinballer.html')
 
 @app.route('/new_game', methods=['GET', 'POST'])
 def new_game():
