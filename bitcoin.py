@@ -10,7 +10,7 @@ from env import BITCOIN, DB
 from http.client import CannotSendRequest
 from hashlib import sha256
 
-MINCONF = 2
+MINCONF = 6
 
 
 def get_height():
@@ -59,6 +59,7 @@ if __name__ == '__main__':
       heightstore = session.query(Height).one()
       height = heightstore.height
       while height < get_height():
+        print("Processing height", height)
         for address, amount in get_incoming_txs(height):
           try:
             [player] = session.query(Player).where(Player.betting_address == address)
@@ -66,7 +67,9 @@ if __name__ == '__main__':
             continue
           if not player.game.finished:
             player.bet += amount
-            player.game.height = height
+            [game] = session.query(Game).where(Game.id == player.game_id)
+            if player.bet >= max([p.bet for p in game.players]):
+              game.height = height
             player.game.pot += amount
             session.commit()
         games = session.query(Game).where(Game.height == height - 144)
