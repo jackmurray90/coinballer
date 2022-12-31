@@ -2,35 +2,32 @@
 
 <style>
   body { text-align: center; }
+  table { border-collapse: collapse; margin: 1em auto; }
+  th, td { border: 1px solid #ccc; padding: 0.5em; }
+  ul, li { margin: 0; }
+  #nav a { padding: 0 2em; }
 </style>
 
 <title>Coinballer</title>
+
+<p id="nav"><a href="/rules">Rules</a> <a href="/new_game">New Game</a> <a href="/about">About</a></p>
 
 <h1>
   <img src="/scales.png" width="100px"/>
   Coinballer
 </h1>
 
-<p>Welcome to the game of Coinballer. Click <a href="/games">here</a> to see a list of games we host.</p>
-
-<h2>Rules</h2>
-
-<p>In this game, up to 100 players are gambling that they have more worth.</p>
-
-<p>Players can make a bet or raise their bet at any time.</p>
-
-<p>The game ends when 144 bitcoin blocks have passed without a raise. This will take appoximately one day.</p>
-
-<p>The player who has contributed the most money to the pot at the end of the game wins the pot, minus a 2% fee for the host.</p>
-
-<p>In the case of tie, funds are distributed equally and any fractional remainder is left with the host.</p>
-
-<p><a href="/new_game">Click here to start a new game</a>.</p>
-
-<h2>About</h2>
-
-<p>The source code for this host is <a href="https://github.com/jackmurray90/coinballer">open source</a> and we are hosted by Google Cloud.</p>
-
-<p>This host is operated by <a href="https://murray.software/">Jack Murray</a>, a software engineer who lives in Melbourne, Australia.</p>
-
-<p>This game was invented by Julian Roetzer, a penetration tester, business person and security researcher who lives in Canberra, Austraila.</p>
+<table>
+  <tr><th>Game</th><th>Total pot size</th><th>Deadline</th></tr>
+  {% for game in games %}
+  <tr>
+    <td><a href="/game/{{ game['game_id'] }}">Game {{ game['game_id'] }}</a></td>
+    <td>{{ '%0.8f'|format(game['pot']) }} BTC</td>
+    {% if game['deadline'] %}
+      <td>Block {{ game['deadline'] }}</td>
+    {% else %}
+      <td>Finished</td>
+    {% endif %}
+  </tr>
+  {% endfor %}
+</table>

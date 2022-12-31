@@ -4,28 +4,21 @@
   table { border-collapse: collapse; margin: 1em auto; }
   th, td { border: 1px solid #ccc; padding: 0.5em; }
   ul, li { margin: 0; }
+  #nav a { padding: 0 2em; }
 </style>
 
 <title>Coinballer</title>
+
+<p id="nav"><a href="/">Games</a> <a href="/rules">Rules</a> <a href="/new_game">New Game</a> <a href="/about">About</a></p>
 
 <h1>
   <img src="/scales.png" width="100px"/>
   Coinballer game {{ game_id }}
 </h1>
 
-<p>Greetings, welcome to Coinballer.</p>
+<p>Players can check the status of this game at <a href="/game/{{game_id}}">https://coinballer.net/game/{{game_id}}</a>.</p>
 
-<p>Thanks for making a new game with us and we hope you will enjoy the experience.</p>
-
-<p>Players can check the status of the game at <a href="/game/{{game_id}}">https://coinballer.net/game/{{game_id}}</a>.</p>
-
-<p>Please share this with the players to commence the game.</p>
-
-<p>The rules can be read <a href="/">here</a>.</p>
-
-<p>We wish you the best of luck.</p>
-
-<p>The last bet for this game was at block height {{ height }}.</p>
+<p>Deadline for this game is currently block {{ deadline }}.</p>
 
 <h2>Players</h2>
 

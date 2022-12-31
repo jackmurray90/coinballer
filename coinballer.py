@@ -8,8 +8,25 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+  rate_limit()
   with Session(engine) as session:
-    return render_template('coinballer.html')
+    games = session.query(Game).order_by(Game.id.desc()).all()
+    games = [{
+      'game_id': game.id,
+      'pot': game.pot,
+      'deadline': game.height + 144 if not game.finished else None
+      } for game in games]
+    return render_template('coinballer.html', games=games)
+
+@app.route('/rules')
+def rules():
+  rate_limit()
+  return render_template('rules.html')
+
+@app.route('/about')
+def about():
+  rate_limit()
+  return render_template('about.html')
 
 @app.route('/new_game', methods=['GET', 'POST'])
 def new_game():
@@ -43,16 +60,4 @@ def game(game_id):
         'payout_address': player.payout_address,
         'bet': player.bet
       } for player in game.players]
-    return render_template('game.html', game_id=game.id, height=game.height, players=players)
-
-@app.route('/games')
-def games():
-  rate_limit()
-  with Session(engine) as session:
-    games = session.query(Game).order_by(Game.pot.desc()).all()
-    games = [{
-      'game_id': game.id,
-      'pot': game.pot,
-      'deadline': game.height + 144 if not game.finished else None
-      } for game in games]
-    return render_template('games.html', games=games)
+    return render_template('game.html', game_id=game.id, deadline=game.height+144, players=players)
