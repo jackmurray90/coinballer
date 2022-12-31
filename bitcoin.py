@@ -68,7 +68,8 @@ if __name__ == '__main__':
           if not player.game.finished:
             player.bet += amount
             [game] = session.query(Game).where(Game.id == player.game_id)
-            game.height = height
+            if player.bet >= max([p.bet for p in game.players]):
+              game.height = height
             player.game.pot += amount
             session.commit()
         games = session.query(Game).where(Game.height == height - 144)
