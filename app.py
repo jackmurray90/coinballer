@@ -6,7 +6,7 @@ from bitcoin import get_new_address, get_height
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/fishballer')
 def index():
   rate_limit()
   with Session(engine) as session:
@@ -18,22 +18,22 @@ def index():
       } for game in games]
     return render_template('index.html', games=games)
 
-@app.route('/rules')
+@app.route('/fishballer/rules')
 def rules():
   rate_limit()
   return render_template('rules.html')
 
-@app.route('/about')
+@app.route('/fishballer/about')
 def about():
   rate_limit()
   return render_template('about.html')
 
-@app.route('/use_cases')
+@app.route('/fishballer/use_cases')
 def use_cases():
   rate_limit()
   return render_template('use_cases.html')
 
-@app.route('/new_game', methods=['GET', 'POST'])
+@app.route('/fishballer/new_game', methods=['GET', 'POST'])
 def new_game():
   rate_limit()
   if not request.form.get('addresses'):
@@ -64,7 +64,7 @@ def new_game():
     session.commit()
     return redirect('/game/%d' % game.id)
 
-@app.route('/game/<game_id>')
+@app.route('/fishballer/game/<game_id>')
 def game(game_id):
   rate_limit()
   with Session(engine) as session:
