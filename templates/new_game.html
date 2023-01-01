@@ -5,7 +5,7 @@
   #nav img { vertical-align: middle; }
 </style>
 
-<title>Coinballer</title>
+<title>Fishballer</title>
 
 <p id="nav"><a href="https://decision.casino/"><img src="/yin-yang.png" width="32px"/></a> <a href="/">Games</a> <a href="/rules">Rules</a> <a href="/use_cases">Use Cases</a> <a href="/about">About</a></p>
 
@@ -14,9 +14,10 @@
   Create a new game
 </h1>
 
-<p>Please input the players' bitcoin addresses, one per line:</p>
-
 <form action="/new_game" method="post">
+  <p>The length of time between the last bid and the end of the game is <input type="number" name="length" value="144"/> blocks.</p>
+  <p>The top <input type="number" name="winners" value="5"/> bets are equal winners.</p>
+  <p>Please input the players' bitcoin addresses, one per line:</p>
   <textarea name="addresses" rows="10" cols="50"></textarea>
   <br/>
   <input type="submit" value="Create game"/>
