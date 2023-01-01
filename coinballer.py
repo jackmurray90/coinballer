@@ -28,6 +28,11 @@ def about():
   rate_limit()
   return render_template('about.html')
 
+@app.route('/use_cases')
+def use_cases():
+  rate_limit()
+  return render_template('use_cases.html')
+
 @app.route('/new_game', methods=['GET', 'POST'])
 def new_game():
   rate_limit()
