@@ -14,9 +14,9 @@ def index():
     games = [{
       'game_id': game.id,
       'pot': game.pot,
-      'deadline': game.height + 144 if not game.finished else None
+      'deadline': game.height + game.length if not game.finished else None
       } for game in games]
-    return render_template('coinballer.html', games=games)
+    return render_template('index.html', games=games)
 
 @app.route('/rules')
 def rules():

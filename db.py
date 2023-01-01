@@ -10,6 +10,7 @@ class Game(Base):
   id = Column(Integer, primary_key=True)
   height = Column(Integer)
   players = relationship('Player')
+  length = Column(Integer)
   finished = Column(Boolean)
   pot = Column(Numeric(16, 8), default=0)
 
