@@ -52,7 +52,7 @@ def new_game():
     return 'Invalid length'
   try:
     winners = int(request.form['winners'])
-    if winners < 1 or winners > 100:
+    if winners < 1 or winners > len(addresses):
       raise Exception
   except:
     return 'Invalid n'

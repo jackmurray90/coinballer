@@ -72,11 +72,11 @@ if __name__ == '__main__':
               game.height = height
             player.game.pot += amount
             session.commit()
-        games = session.query(Game).where(Game.height == height - 144)
+        games = session.query(Game).where(Game.height == height - Game.length)
         for game in games:
           winners = []
           for player in game.players:
-            if player.bet == max([p.bet for p in players]):
+            if player.bet == list(reversed(sorted([p.bet for p in players])))[game.winners-1]:
               winners.append(player)
           payout = round_down(sum([p.bet for p in players]) * Decimal('0.98') / len(winners))
           for winner in winners:
