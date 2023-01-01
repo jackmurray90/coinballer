@@ -62,7 +62,7 @@ def new_game():
     for address in addresses:
       session.add(Player(game=game, betting_address=get_new_address(), payout_address=address, bet=0))
     session.commit()
-    return redirect('/game/%d' % game.id)
+    return redirect('/fishballer/game/%d' % game.id)
 
 @app.route('/fishballer/game/<game_id>')
 def game(game_id):

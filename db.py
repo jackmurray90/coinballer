@@ -11,6 +11,7 @@ class Game(Base):
   height = Column(Integer)
   players = relationship('Player')
   length = Column(Integer)
+  winners = Column(Integer)
   finished = Column(Boolean)
   pot = Column(Numeric(16, 8), default=0)
 
