@@ -44,8 +44,20 @@ def new_game():
       return 'Player addresses must be unique'
     if len(address) > 128:
       return 'Invalid bitcoin address'
+  try:
+    length = int(request.form['length'])
+    if length < 1 or length > 525600:
+      raise Exception
+  except:
+    return 'Invalid length'
+  try:
+    winners = int(request.form['winners'])
+    if winners < 1 or winners > 100:
+      raise Exception
+  except:
+    return 'Invalid n'
   with Session(engine) as session:
-    game = Game(height=get_height(), finished=False)
+    game = Game(height=get_height(), winners=winners, length=length, finished=False)
     session.add(game)
     for address in addresses:
       session.add(Player(game=game, betting_address=get_new_address(), payout_address=address, bet=0))
@@ -65,4 +77,4 @@ def game(game_id):
         'payout_address': player.payout_address,
         'bet': player.bet
       } for player in game.players]
-    return render_template('game.html', game_id=game.id, deadline=game.height+144, players=players)
+    return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, deadline=game.height+game.length, players=players)
