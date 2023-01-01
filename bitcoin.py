@@ -78,7 +78,7 @@ if __name__ == '__main__':
           for player in game.players:
             if player.bet == list(reversed(sorted([p.bet for p in game.players])))[game.winners-1]:
               winners.append(player)
-          payout = round_down(sum([p.bet for p in players]) * Decimal('0.98') / len(winners))
+          payout = round_down(sum([p.bet for p in game.players]) * Decimal('0.98') / len(winners))
           for winner in winners:
             send(winner.payout_address, payout)
           game.finished = True
