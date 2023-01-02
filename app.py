@@ -6,7 +6,7 @@ from bitcoin import get_new_address, get_height
 
 app = Flask(__name__)
 
-@app.route('/fishballer')
+@app.route('/')
 def index():
   rate_limit()
   with Session(engine) as session:
@@ -18,22 +18,22 @@ def index():
       } for game in games]
     return render_template('index.html', games=games)
 
-@app.route('/fishballer/rules')
+@app.route('/rules')
 def rules():
   rate_limit()
   return render_template('rules.html')
 
-@app.route('/fishballer/about')
+@app.route('/about')
 def about():
   rate_limit()
   return render_template('about.html')
 
-@app.route('/fishballer/use_cases')
+@app.route('/use_cases')
 def use_cases():
   rate_limit()
   return render_template('use_cases.html')
 
-@app.route('/fishballer/new_game', methods=['GET', 'POST'])
+@app.route('/new_game', methods=['GET', 'POST'])
 def new_game():
   rate_limit()
   if not request.form.get('addresses'):
@@ -62,9 +62,9 @@ def new_game():
     for address in addresses:
       session.add(Player(game=game, betting_address=get_new_address(), payout_address=address, bet=0))
     session.commit()
-    return redirect('/fishballer/game/%d' % game.id)
+    return redirect('/game/%d' % game.id)
 
-@app.route('/fishballer/game/<game_id>')
+@app.route('/game/<game_id>')
 def game(game_id):
   rate_limit()
   with Session(engine) as session:
@@ -77,4 +77,5 @@ def game(game_id):
         'payout_address': player.payout_address,
         'bet': player.bet
       } for player in game.players]
-    return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, deadline=game.height+game.length, players=players)
+    deadline = game.height + game.length if not game.finished else None
+    return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, deadline=deadline, players=players)
