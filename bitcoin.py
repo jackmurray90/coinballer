@@ -8,6 +8,7 @@ from math import floor
 from decimal import Decimal
 from env import BITCOIN, DB
 from http.client import CannotSendRequest
+from bitcoinrpc.authproxy import JSONRPCException
 from hashlib import sha256
 
 MINCONF = 6
@@ -38,7 +39,9 @@ def send(address, amount):
   while True:
     try:
       rpc = AuthServiceProxy(BITCOIN)
-      rpc.send({address: amount})
+      return rpc.send({address: amount})
+    except JSONRPCException:
+      return
     except:
       sleep(1)
 
