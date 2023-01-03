@@ -60,10 +60,7 @@ def validate_address(address):
   while True:
     try:
       rpc = AuthServiceProxy(BITCOIN)
-      rpc.validateaddress(address)
-      return True
-    except JSONRPCException:
-      return False
+      return rpc.validateaddress(address)['isvalid']
     except:
       sleep(1)
 
