@@ -34,28 +34,37 @@ def about():
 
 @app.route('/new_game', methods=['GET', 'POST'])
 def new_game():
-  rate_limit()
   if is_australia(): return redirect('/australia')
   if not request.form.get('addresses'):
-    return render_template('new_game.html')
+    error = None
+    if 'invalid_address' in request.args:
+      error = 'An invalid bitcoin address was provided.'
+    if 'addresses_must_be_unique' in request.args:
+      error = 'Player addresses must be unique.'
+    if 'invalid_length' in request.args:
+      error = 'An invalid length was provided. Length must be between 12 and 525600 blocks.'
+    if 'invalid_winners' in request.args:
+      error = 'An invalid number of winners was provided. It must be between 1 and the number of players.'
+    return render_template('new_game.html', error=error)
+  rate_limit()
   addresses = [address for address in request.form['addresses'].strip().split()]
   for address in addresses:
     if len([a for a in addresses if a == address]) > 1:
-      return 'Player addresses must be unique'
+      return redirect('/new_game?addresses_must_be_unique')
     if not validate_address(address):
-      return 'Invalid bitcoin address'
+      return redirect('/new_game?invalid_address')
   try:
     length = int(request.form['length'])
-    if length < 1 or length > 525600:
+    if length < 12 or length > 525600:
       raise Exception
   except:
-    return 'Invalid length'
+    return redirect('/new_game?invalid_length')
   try:
     winners = int(request.form['winners'])
     if winners < 1 or winners > len(addresses):
       raise Exception
   except:
-    return 'Invalid n'
+    return redirect('/new_game?invalid_winners')
   with Session(engine) as session:
     game = Game(height=get_height(), winners=winners, length=length, finished=False)
     session.add(game)
