@@ -56,6 +56,17 @@ def get_new_address():
 def round_down(amount):
   return floor(amount * 10**8) / Decimal(10**8)
 
+def validate_address(address):
+  while True:
+    try:
+      rpc = AuthServiceProxy(BITCOIN)
+      rpc.validateaddress(address)
+      return True
+    except JSONRPCException:
+      return False
+    except:
+      sleep(1)
+
 if __name__ == '__main__':
   with Session(create_engine(DB)) as session:
     while True:

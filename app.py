@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, render_template, make_response
 from db import Game, Player, RateLimit, engine
 from sqlalchemy.orm import Session
 from rate_limit import rate_limit
-from bitcoin import get_new_address, get_height
+from bitcoin import get_new_address, get_height, validate_address
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ def new_game():
   for address in addresses:
     if len([a for a in addresses if a == address]) > 1:
       return 'Player addresses must be unique'
-    if len(address) > 128:
+    if not validate_address(address):
       return 'Invalid bitcoin address'
   try:
     length = int(request.form['length'])
