@@ -73,4 +73,4 @@ def game(game_id):
         'bet': player.bet
       } for player in game.players]
     deadline = game.height + game.length if not game.finished else None
-    return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, deadline=deadline, players=players)
+    return render_template('game.html', game_id=game.id, confirmed_height=get_height(), winners=game.winners, length=game.length, deadline=deadline, players=players)

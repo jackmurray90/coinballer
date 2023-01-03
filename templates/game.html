@@ -17,6 +17,8 @@
   Coinballer game {{ game_id }}
 </h1>
 
+<p>Current confirmed block height: {{ confirmed_height }}.</p>
+
 <p>Deadline for this game: {% if deadline %}Block {{ deadline }}{% else %}Finished{% endif %}.</p>
 
 <p>Length of time between last bet and deadline: {{ length }} blocks.</p>
