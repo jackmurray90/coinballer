@@ -61,7 +61,6 @@ def new_game():
 
 @app.route('/game/<game_id>')
 def game(game_id):
-  rate_limit()
   with Session(engine) as session:
     try:
       [game] = session.query(Game).where(Game.id == game_id)
