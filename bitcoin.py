@@ -69,7 +69,7 @@ if __name__ == '__main__':
     while True:
       heightstore = session.query(Height).one()
       height = heightstore.height
-      while height < get_height():
+      while height <= get_height():
         print("Processing height", height)
         for address, amount in get_incoming_txs(height):
           try:
