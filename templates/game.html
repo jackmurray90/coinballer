@@ -10,14 +10,15 @@
 
 <title>Coinballer</title>
 
-<p id="nav"><a href="https://decision.casino/"><img src="/yin-yang.png" width="32px"/></a> <a href="/">Games</a> <a href="/rules">Rules</a> <a href="/use_cases">Use Cases</a> <a href="/new_game">New Game</a> <a href="/about">About</a></p>
+<p id="nav"><a href="https://decision.casino/"><img src="/yin-yang.png" width="32px"/></a> <a href="/">Games</a> <a href="/rules">Rules</a> <a href="/new_game">New Game</a> <a href="/about">About</a></p>
 
-<h1>
-  <img src="/scales.png" width="100px"/>
-  Coinballer game {{ game_id }}
-</h1>
+<h1><img src="/coinballer.png" width="512px"/></h1>
 
-<p>Deadline for this game: {% if deadline %}block {{ deadline }}{% else %}Finished{% endif %}.</p>
+<h2>Game {{ game_id }}</h2>
+
+<p>Current confirmed block height: {{ confirmed_height }}.</p>
+
+<p>Deadline for this game: {% if deadline %}Block {{ deadline }}{% else %}Finished{% endif %}.</p>
 
 <p>Length of time between last bet and deadline: {{ length }} blocks.</p>
 
