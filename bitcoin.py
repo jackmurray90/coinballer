@@ -29,7 +29,7 @@ def get_incoming_txs(height):
       txs = rpc.listsinceblock(rpc.getblockhash(height-1))
       incoming_txs = []
       for tx in txs['transactions']:
-        if tx['category'] == 'receive' and tx['blockheight'] == height:
+        if tx.get('category') == 'receive' and tx.get('blockheight') == height:
           incoming_txs.append((tx['address'], tx['amount']))
       return incoming_txs
     except:
