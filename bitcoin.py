@@ -87,7 +87,7 @@ if __name__ == '__main__':
         for game in games:
           winners = []
           for player in game.players:
-            if player.bet == list(reversed(sorted([p.bet for p in game.players])))[game.winners-1]:
+            if player.bet >= list(reversed(sorted([p.bet for p in game.players])))[game.winners-1]:
               winners.append(player)
           payout = round_down(sum([p.bet for p in game.players]) * Decimal('0.98') / len(winners))
           for winner in winners:
