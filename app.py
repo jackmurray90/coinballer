@@ -55,9 +55,9 @@ def new_game():
     if 'addresses_must_be_unique' in request.args:
       error = 'Player addresses must be unique.'
     if 'invalid_length' in request.args:
-      error = 'An invalid length was provided. Length must be between 12 and 525600 blocks.'
+      error = 'An invalid length was provided. Length must be between 12 and 432 blocks.'
     if 'invalid_winners' in request.args:
-      error = 'An invalid number of winners was provided. It must be between 1 and the number of players.'
+      error = 'An invalid number of winners was provided. It must be between 1 and one less than the number of players.'
     return render_template('new_game.html', error=error)
   rate_limit()
   addresses = [address for address in request.form['addresses'].strip().split()]
@@ -68,13 +68,13 @@ def new_game():
       return redirect('/new_game?invalid_address')
   try:
     length = int(request.form['length'])
-    if length < 12 or length > 525600:
+    if length < 12 or length > 432:
       raise Exception
   except:
     return redirect('/new_game?invalid_length')
   try:
     winners = int(request.form['winners'])
-    if winners < 1 or winners > len(addresses):
+    if winners < 1 or winners >= len(addresses):
       raise Exception
   except:
     return redirect('/new_game?invalid_winners')
