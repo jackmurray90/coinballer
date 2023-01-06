@@ -11,7 +11,7 @@ def rate_limit():
       rate_limit = RateLimit(address=request.remote_addr, timestamp=0)
       session.add(rate_limit)
       session.commit()
-    if rate_limit.timestamp + 1 > time():
+    if rate_limit.timestamp + 0.5 > time():
       abort(429)
     rate_limit.timestamp = time()
     session.commit()
