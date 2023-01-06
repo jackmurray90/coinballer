@@ -13,13 +13,25 @@ def index():
   rate_limit()
   if is_australia(): return redirect('/australia')
   with Session(engine) as session:
-    games = session.query(Game).order_by(Game.id.desc()).all()
+    games = session.query(Game).where(Game.finished == False).order_by(Game.id.desc()).all()
     games = [{
       'game_id': game.id,
       'pot': game.pot,
       'deadline': game.height + game.length if not game.finished else None
       } for game in games]
     return render_template('index.html', games=games)
+
+@app.route('/games')
+def games():
+  rate_limit()
+  if is_australia(): return redirect('/australia')
+  with Session(engine) as session:
+    games = session.query(Game).where((Game.finished == True) & (Game.pot != 0)).order_by(Game.id.desc()).all()
+    games = [{
+      'game_id': game.id,
+      'pot': game.pot
+      } for game in games]
+    return render_template('games.html', games=games)
 
 @app.route('/rules')
 def rules():
