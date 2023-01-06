@@ -83,6 +83,10 @@ if __name__ == '__main__':
               game.height = height
             game.pot += amount
             session.commit()
+          else:
+            amount -= Decimal('0.0001')
+            if amount >= Decimal('0.00005460'):
+              send(player.payout_address, amount)
         games = session.query(Game).where(Game.height == height - Game.length)
         for game in games:
           winners = []
