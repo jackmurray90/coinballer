@@ -19,11 +19,11 @@
 <p>Please allow 6 confirmations before your transaction will appear on the site.</p>
 
 <table>
-  <tr><th>Current confirmed block height</th><td>{{ confirmed_height }}.</td></tr>
+  <tr><th>Current confirmed block height</th><td>{{ confirmed_height }}</td></tr>
   <tr><th>Deadline for this game</th><td>{% if deadline %}Block {{ deadline }}{% else %}Finished{% endif %}</td></tr>
-  <tr><th>Length of time between last bet and deadline</th><td>{{ length }} blocks.</td></tr>
+  <tr><th>Length of time between last bet and deadline</th><td>{{ length }} blocks</td></tr>
   <tr><th>Minimum number of winners</th><td>{{ winners }}</td></tr>
-  <tr><th>Currently each winner will receive</th><td>{{ '%0.8f'%payout }} BTC.</td></tr>
+  <tr><th>Currently each winner will receive</th><td>{{ '%0.8f'%payout }} BTC</td></tr>
 </table>
 
 <h2>Players</h2>
