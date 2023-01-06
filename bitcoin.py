@@ -96,4 +96,4 @@ if __name__ == '__main__':
         heightstore.height += 1
         height = heightstore.height
         session.commit()
-        sleep(1)
+      sleep(1)
