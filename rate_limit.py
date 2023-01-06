@@ -2,6 +2,7 @@ from flask import request, abort
 from sqlalchemy.orm import Session
 from db import engine, RateLimit
 from time import time
+from decimal import Decimal
 
 def rate_limit():
   with Session(engine) as session:
@@ -11,7 +12,7 @@ def rate_limit():
       rate_limit = RateLimit(address=request.remote_addr, timestamp=0)
       session.add(rate_limit)
       session.commit()
-    if rate_limit.timestamp + 0.5 > time():
+    if rate_limit.timestamp + Decimal('0.5') > time():
       abort(429)
     rate_limit.timestamp = time()
     session.commit()
