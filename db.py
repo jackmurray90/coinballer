@@ -20,6 +20,7 @@ class Player(Base):
 
   id = Column(Integer, primary_key=True)
   game_id = Column(Integer, ForeignKey('games.id'))
+  username = Column(String)
   betting_address = Column(String)
   payout_address = Column(String)
   bet = Column(Numeric(16, 8))

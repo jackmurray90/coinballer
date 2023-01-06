@@ -29,12 +29,13 @@
 <h2>Players</h2>
 
 <table>
-  <tr><th>Betting address</th><th>Payout address</th><th>Total bet</th></tr>
+  <tr><th>Username</th><th>Betting address</th><th>Payout address</th><th>Total bet</th></tr>
   {% for player in players %}
   <tr>
-    <td><a href="https://www.blockchain.com/explorer/addresses/btc/{{ player['betting_address'] }}">{{ player['betting_address'] }}</a></td>
-    <td><a href="https://www.blockchain.com/explorer/addresses/btc/{{ player['payout_address'] }}">{{ player['payout_address'] }}</a></td>
-    <td>{{ '%0.8f'|format(player['bet']) }} BTC</td>
+    <td>{{ player.username }}</td>
+    <td><a href="https://www.blockchain.com/explorer/addresses/btc/{{ player.betting_address }}">{{ player.betting_address }}</a></td>
+    <td><a href="https://www.blockchain.com/explorer/addresses/btc/{{ player.payout_address }}">{{ player.payout_address }}</a></td>
+    <td>{{ '%0.8f'|format(player.bet) }} BTC</td>
   </tr>
   {% endfor %}
 </table>

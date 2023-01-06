@@ -1,9 +1,31 @@
 <!doctype html>
 <style>
   body { text-align: center; }
+  table { border-collapse: collapse; margin: 1em auto; }
+  th, td { border: 1px solid #ccc; padding: 0.5em; }
   #nav a { padding: 0 2em; }
   #nav img { vertical-align: middle; }
 </style>
+
+<script>
+  let id = 0;
+  function addPlayer() {
+    const table = document.getElementById("players");
+    const n = table.rows.length;
+    const row = table.insertRow(n);
+    row.id = `row_${id++}`;
+    const username = row.insertCell(0);
+    const address = row.insertCell(1);
+    const del = row.insertCell(2);
+    username.innerHTML = '<input name="username" size="16"/>';
+    address.innerHTML = '<input name="address" size="50"/>';
+    del.innerHTML = `<button type="button" onClick="removePlayer('${row.id}')">Remove Player</button>`;
+  }
+  function removePlayer(row_id) {
+    const row = document.getElementById(row_id);
+    row.parentNode.removeChild(row);
+  }
+</script>
 
 <title>Coinballer</title>
 
@@ -14,13 +36,21 @@
 <h2>Create a new game</h2>
 
 <form action="/new_game" method="post">
-  {% if error %}
+  {% for error in errors %}
     <p>Error: {{ error }}</p>
-  {% endif %}
-  <p>The length of time between the last bet/raise and the end of the game is <input size="6" name="length" value="144"/> blocks.</p>
-  <p>Anybody who has contributed at least as much as the <input size="3" name="winners" value="1"/>th highest bet wins an equal share of the pot.</p>
-  <p>Please input the players' bitcoin addresses, one per line:</p>
-  <textarea name="addresses" rows="10" cols="50"></textarea>
-  <br/>
-  <input type="submit" value="Create game"/>
+  {% endfor %}
+  <p>The length of time between the last bet/raise and the end of the game is <input size="6" name="length" value="{{ length|js_string }}"/> blocks.</p>
+  <p>Anybody who has contributed at least as much as the <input size="3" name="winners" value="{{ winners|js_string }}"/>th highest bet wins an equal share of the pot.</p>
+  <table id="players">
+    <tr><th>Username</th><th>Payout Address</th><th>Remove Player</th></tr>
+    {% for username, address in players %}
+      <tr id="init_row_{{ loop.index }}">
+        <td><input name="username" size="16" value="{{ username|js_string }}"/></td>
+        <td><input name="address" size="50" value="{{ address|js_string }}"></td>
+        <td><button type="button" onClick="removePlayer('init_row_{{ loop.index }}')">Remove Player</button></td>
+      </tr>
+    {% endfor %}
+  </table>
+  <p><button type="button" onClick="addPlayer()">Add Player</button></p>
+  <p><input type="submit" value="Create game"/></p>
 </form>
