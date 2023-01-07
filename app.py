@@ -133,12 +133,12 @@ def game(game_id):
       'unconfirmed_bet': get_unconfirmed_bet(player.betting_address)
       } for player in game.players]
     pot = sum([p.bet for p in game.players])
-    countdown = game.height + game.length - get_real_height()
     winners = []
     for player in game.players:
       if player.bet >= list(reversed(sorted([p.bet for p in game.players])))[game.winners-1]:
         winners.append(player)
     payout = round_down(sum([p.bet for p in game.players]) * Decimal('0.98') / len(winners))
+    countdown = game.height + game.length - get_real_height()
     if countdown < 0:
       countdown = 'Game is finished'
     return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, countdown=countdown, players=players, payout=payout)
