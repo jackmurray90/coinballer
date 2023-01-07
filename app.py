@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, render_template, make_response
 from db import Game, Player, RateLimit, engine
 from sqlalchemy.orm import Session
 from rate_limit import rate_limit
-from bitcoin import get_new_address, get_height, validate_address, round_down
+from bitcoin import get_new_address, get_height, validate_address, round_down, get_unconfirmed_transactions
 from geoip import is_australia
 from decimal import Decimal
 from math import floor
@@ -120,10 +120,22 @@ def game(game_id):
       [game] = session.query(Game).where(Game.id == game_id)
     except:
       return 'Game not found.'
+    unconfirmed_transactions = get_unconfirmed_transactions()
+    def get_unconfirmed_bet(address):
+      if address in unconfirmed_transactions:
+        return max([tx['amount'] for tx in unconfirmed_transactions[address]])
+      return Decimal(0)
+    players = [{
+      'username': player.username,
+      'betting_address': player.betting_address,
+      'payout_address': player.payout_address,
+      'bet': player.bet,
+      'unconfirmed_bet': get_unconfirmed_bet(player.betting_address)
+      } for player in game.players]
     pot = sum([p.bet for p in game.players])
     payout = round_down(pot * Decimal('0.98') / game.winners)
     deadline = game.height + game.length if not game.finished else None
-    return render_template('game.html', game_id=game.id, confirmed_height=get_height(), winners=game.winners, length=game.length, deadline=deadline, players=game.players, payout=payout)
+    return render_template('game.html', game_id=game.id, confirmed_height=get_height(), winners=game.winners, length=game.length, deadline=deadline, players=players, payout=payout)
 
 @app.route('/australia')
 def australia():

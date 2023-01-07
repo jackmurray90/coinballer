@@ -35,6 +35,22 @@ def get_incoming_txs(height):
     except:
       sleep(1)
 
+def get_unconfirmed_transactions():
+  while True:
+    try:
+      rpc = AuthServiceProxy(BITCOIN)
+      txs = rpc.listsinceblock(rpc.getblockhash(get_height()))
+      incoming_txs = {}
+      for tx in txs['transactions']:
+        if tx.get('category') == 'receive':
+          if not tx.get('address') in incoming_txs:
+            incoming_txs[tx.get('address')] = []
+          incoming_txs[tx.get('address')].append({'amount': Decimal(tx.get('amount')), 'confirmations': tx.get('confirmations') or 0})
+      return incoming_txs
+    except Exception as e:
+      print(e)
+      sleep(1)
+
 def send(address, amount):
   while True:
     try:
