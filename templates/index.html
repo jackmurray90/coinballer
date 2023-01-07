@@ -20,7 +20,7 @@
   {% for game in games %}
   <tr>
     <td><a href="/game/{{ game['game_id'] }}">Game {{ game['game_id'] }}</a></td>
-    <td>{{ '%0.8f'|format(game['pot']) }} BTC</td>
+    <td>{{ game['pot']|format_decimal(8) }} BTC</td>
     {% if game['deadline'] %}
       <td>Block {{ game['deadline'] }}</td>
     {% else %}

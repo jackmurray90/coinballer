@@ -5,12 +5,28 @@ from rate_limit import rate_limit
 from bitcoin import get_new_address, get_height, validate_address, round_down
 from geoip import is_australia
 from decimal import Decimal
+from math import floor
 
 app = Flask(__name__)
 
 @app.template_filter()
 def js_string(s):
   return str(s).replace('"', '\\"').replace("'", "\\'").replace('\\', '\\\\')
+
+@app.template_filter()
+def format_decimal(d, decimal_places):
+  digit = Decimal('10')
+  while digit <= d:
+    digit *= 10
+  result = ''
+  while decimal_places:
+    result += str(floor(d % digit * 10 / digit))
+    digit /= 10
+    if digit == 1:
+      result += '.'
+    if digit < 1:
+      decimal_places -= 1
+  return result
 
 @app.route('/')
 def index():
