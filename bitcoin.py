@@ -54,8 +54,7 @@ def get_unconfirmed_transactions():
             incoming_txs[tx.get('address')] = []
           incoming_txs[tx.get('address')].append({'amount': Decimal(tx.get('amount')), 'confirmations': tx.get('confirmations') or 0})
       return incoming_txs
-    except Exception as e:
-      print(e)
+    except:
       sleep(1)
 
 def send(address, amount):
