@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, render_template, make_response
 from db import Game, Player, RateLimit, engine
 from sqlalchemy.orm import Session
 from rate_limit import rate_limit
-from bitcoin import get_new_address, get_height, validate_address, round_down, get_unconfirmed_transactions
+from bitcoin import get_new_address, get_height, validate_address, round_down, get_unconfirmed_transactions, get_real_height
 from geoip import is_australia
 from decimal import Decimal
 from math import floor
@@ -134,8 +134,10 @@ def game(game_id):
       } for player in game.players]
     pot = sum([p.bet for p in game.players])
     payout = round_down(pot * Decimal('0.98') / game.winners)
-    deadline = game.height + game.length if not game.finished else None
-    return render_template('game.html', game_id=game.id, confirmed_height=get_height(), winners=game.winners, length=game.length, deadline=deadline, players=players, payout=payout)
+    countdown = game.height + game.length - get_real_height()
+    if countdown < 0:
+      countdown = 'Game is finished'
+    return render_template('game.html', game_id=game.id, winners=game.winners, length=game.length, countdown=countdown, players=players, payout=payout)
 
 @app.route('/australia')
 def australia():
